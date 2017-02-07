@@ -31,7 +31,9 @@
     "test:unit": "NODE_ENV=test nyc mocha --require babel-register -R spec ./tests",
     "clean": "rimraf lib",
     "update": "updtr",
-    "postinstall": "npm run build"
+    "postinstall": "npm run build",
+    "precommit": "npm test:lint",
+    "prepush": "npm test"
   },
   "keywords": [
     "hull",
@@ -46,6 +48,7 @@
     "eslint": "^3.14.1",
     "eslint-config-airbnb-base": "^11.0.1",
     "eslint-plugin-import": "^2.2.0",
+    "husky": "^0.13.1",
     "mocha": "^3.2.0",
     "nyc": "^10.1.2",
     "rimraf": "^2.5.4",
