@@ -1,13 +1,22 @@
-const InstrumentationAgent from "hull-ship-base/lib/instrumentation-agent";
-const WebApp from "hull-ship-base/lib/app/web";
-const StaticRouter from "hull-ship-base/lib/router/static";
+import Hull from "hull";
 
-const webApp = new WebApp();
+import WebApp from "hull-ship-base/lib/app/web";
+import InstrumentationAgent from "./src/instrumentation/instrumentation-agent";
+import QueueAdapter from "hull-ship-base/lib/queue/adapter/kue";
+
+const instrumentationAgent = new InstrumentationAgent();
+
+const webApp = new WebApp({
+  Hull,
+  instrumentationAgent
+});
 
 const middlewares = [
   tokenMiddleware,
   hullMiddleware,
-  requireConfiguration,
+  RequireConfiguration(req => req),
+  QueueMiddleware(queueAdapter),
+  segmentsMiddleware
   bodyParser.json()
 ];
 
@@ -18,5 +27,4 @@ app.post("/batch", ..middlewares, (req, res, next) {
   }).then(next, next);
 }, responseMiddleware);
 
-webApp.listen(port);
-
+app.listen(port);

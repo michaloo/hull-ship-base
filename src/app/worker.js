@@ -13,6 +13,8 @@ export default class WorkerApp {
 
     this.supply = new Supply();
 
+    this.use(instrumentationAgent.metricMiddlware);
+
     // instrument jobs between 1 and 5 minutes
     setInterval(this.metricJobs.bind(this), _.random(60000, 300000));
   }
@@ -59,13 +61,13 @@ export default class WorkerApp {
               return Promise.reject(err);
             }
             req.hull.client.logger.info("dispatch", { id: job.id, name: jobName });
-            this.instrumentationAgent.metricInc(`ship.job.${jobName}.start`, 1, req.hull.client.configuration());
+            req.metric.inc(`ship.job.${jobName}.start`);
             return this.jobs[jobName].call(job, req, res);
           })
           .then((jobRes) => {
             callback(null, jobRes);
           }, (err) => {
-            this.instrumentationAgent.metricInc(`ship.job.${jobName}.error`, 1, req.hull.client.configuration());
+            req.metric.Inc(`ship.job.${jobName}.error`);
             this.instrumentationAgent.catchError(err, {
               job_id: job.id
             }, {
@@ -79,7 +81,7 @@ export default class WorkerApp {
             this.instrumentationAgent.endTransaction();
             const duration = process.hrtime(startTime);
             const ms = (duration[0] * 1000) + (duration[1] / 1000000);
-            this.instrumentationAgent.metricVal(`ship.job.${jobName}.duration`, ms, req.hull.client.configuration());
+            req.metric.val(`ship.job.${jobName}.duration`, ms);
           });
       });
     });

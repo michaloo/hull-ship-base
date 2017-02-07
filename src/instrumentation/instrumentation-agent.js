@@ -4,12 +4,19 @@ import metrics from "datadog-metrics";
 import dogapi from "dogapi";
 import _ from "lodash";
 
+import MetricAgent from "./metric-agent";
+
 export default class InstrumentationAgent {
 
   constructor() {
     this.nr = null;
     this.raven = null;
-    this.manifest = require(`${process.cwd()}/manifest.json`); // eslint-disable-line global-require
+    try {
+      this.manifest = require(`${process.cwd()}/manifest.json`); // eslint-disable-line global-require
+    } catch (e) {
+      this.manifest = {};
+    }
+
 
     if (process.env.NEW_RELIC_LICENSE_KEY) {
       this.nr = require("newrelic"); // eslint-disable-line global-require
@@ -31,8 +38,6 @@ export default class InstrumentationAgent {
       });
       this.raven.patchGlobal();
     }
-
-    this.shipAppMiddleware = this.shipAppMiddleware.bind(this);
   }
 
   startTransaction(jobName, callback) {
@@ -62,49 +67,6 @@ export default class InstrumentationAgent {
     return console.error(util.inspect(err, { depth: 10 }));
   }
 
-  metricVal(metric, value = 1, context) {
-    if (!this.metrics) {
-      return null;
-    }
-    try {
-      return this.metrics.gauge(metric, parseFloat(value), this.getMetricTags(context));
-    } catch (err) {
-      console.warn("metricVal.error", err);
-    }
-    return null;
-  }
-
-  metricInc(metric, value = 1, context) {
-    if (!this.metrics) {
-      return null;
-    }
-    try {
-      return this.metrics.increment(metric, parseFloat(value), this.getMetricTags(context));
-    } catch (err) {
-      console.warn("metricInc.error", err);
-    }
-    return null;
-  }
-
-  getMetricTags({ organization = "none", id = "none" } = {}) {
-    const hullHost = organization.split(".").slice(1).join(".");
-    const tags = [
-      "source:ship", `ship_version:${this.manifest.version}`, `ship_name:${this.manifest.name}`,
-      `ship_env:${process.env.NODE_ENV || "production"}`, `hull_host:${hullHost}`,
-      `organization:${organization}`, `ship:${id}`
-    ];
-    return tags;
-  }
-
-  metricEvent({ title, text = "", properties = {}, context }) {
-    if (!this.dogapi) {
-      return null;
-    }
-    return this.dogapi.event.create(`${this.manifest.name}.${title}`, text, _.merge(properties, {
-      tags: this.getMetricTags(context)
-    }));
-  }
-
   startMiddleware() {
     if (this.raven) {
       return raven.middleware.express.requestHandler(this.raven);
@@ -123,9 +85,9 @@ export default class InstrumentationAgent {
     };
   }
 
-  shipAppMiddleware(req, res, next) {
-    req.shipApp = req.shipApp || {};
-    req.shipApp.instrumentationAgent = req.shipApp.instrumentationAgent || this;
+  metricMiddleware(req, res, next) {
+    req.hull = req.hull || {};
+    req.hull.metric = req.hull.metric || new MetricAgent(req, this);
     next();
   }
 }

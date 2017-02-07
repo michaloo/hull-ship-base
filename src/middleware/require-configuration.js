@@ -1,14 +1,15 @@
 /**
  * This Middleware makes sure that we have the ship configured to make
  * 3rd API calls
- * @param  {Object}   req
- * @param  {Object}   res
- * @param  {Function} next
+ * @param  {Function} check
  */
-export default function requireConfiguration(req, res, next) {
-  if (!req.shipApp.syncAgent.isConfigured()) {
-    req.hull.client.logger.info("ship is not configured");
-    return res.status(403).send("Ship is not configured");
+export default function requireConfigurationFactory(check) {
+  return requireConfigurationMiddleware(req, res, next) {
+    if (!check(req)) {
+      req.hull.client.logger.info("Ship is not configured");
+      return res.status(403).send("Ship is not configured");
+    }
+    return next();
   }
-  return next();
 }
+
