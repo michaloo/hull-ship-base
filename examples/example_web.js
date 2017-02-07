@@ -1,30 +1,30 @@
 import Hull from "hull";
 
-import WebApp from "hull-ship-base/lib/app/web";
-import InstrumentationAgent from "./src/instrumentation/instrumentation-agent";
-import QueueAdapter from "hull-ship-base/lib/queue/adapter/kue";
+import WebApp from "../src/app/web";
+import InstrumentationAgent from "../src/instrumentation/instrumentation-agent";
+import QueueAdapter from "../src/queue/adapter/kue";
 
 const instrumentationAgent = new InstrumentationAgent();
 
-const webApp = new WebApp({
+const app = new WebApp({
   Hull,
   instrumentationAgent
 });
 
 const middlewares = [
-  tokenMiddleware,
-  hullMiddleware,
-  RequireConfiguration(req => req),
-  QueueMiddleware(queueAdapter),
-  segmentsMiddleware
-  bodyParser.json()
+  // tokenMiddleware,
+  Hull.Middleware({}),
+  // RequireConfiguration(req => req),
+  // QueueMiddleware(queueAdapter),
+  // segmentsMiddleware,
+  // bodyParser.json()
 ];
 
-app.post("/batch", ..middlewares, (req, res, next) {
+app.post("/batch", ...middlewares, (req, res, next) => {
   return handleExtract(req, 100, (users) => {
     const segmentId = req.query.segment_id || null;
     users = users.map(setUserSegments.bind(null, req, { add_segment_ids: [segmentId] }));
   }).then(next, next);
-}, responseMiddleware);
+}/*, responseMiddleware*/);
 
-app.listen(port);
+app.listen(8080);

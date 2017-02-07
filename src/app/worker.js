@@ -10,11 +10,11 @@ export default class WorkerApp {
     this.queueAdapter = queueAdapter;
     this.jobs = jobs;
     this.instrumentationAgent = instrumentationAgent;
+    this.Hull = Hull;
 
     this.supply = new Supply();
 
-    this.use(instrumentationAgent.metricMiddlware);
-
+    this.use(instrumentationAgent.metricMiddleware);
     // instrument jobs between 1 and 5 minutes
     setInterval(this.metricJobs.bind(this), _.random(60000, 300000));
   }
@@ -39,7 +39,7 @@ export default class WorkerApp {
     this.queueAdapter.process("queueApp", (job) => {
       return this.dispatch(job);
     });
-    Hull.logger.info("workerApp.process");
+    this.Hull.logger.info("workerApp.process");
     return this;
   }
 
