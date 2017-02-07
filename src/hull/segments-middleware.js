@@ -1,6 +1,4 @@
 /**
- * This Middleware makes sure that we have the ship configured to make
- * 3rd API calls
  * @param  {Object}   req
  * @param  {Object}   res
  * @param  {Function} next
