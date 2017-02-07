@@ -6,7 +6,7 @@ import * as hull from "./index";
  */
 export default function hullAgentMiddleware(req, res, next) {
   req.hull = req.hull || {};
-  req.hull.agent = req.hull.agent || _.bindAll(hull, _.keys(hull));
+  req.hull.agent = req.hull.agent || _.mapValues(hull, func => func.bind(null, req));
   return next();
 }
 
