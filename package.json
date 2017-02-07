@@ -32,7 +32,7 @@
     "clean": "rimraf lib",
     "update": "updtr",
     "postinstall": "npm run build",
-    "precommit": "npm test:lint",
+    "precommit": "npm run test:lint",
     "prepush": "npm test"
   },
   "keywords": [
