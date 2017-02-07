@@ -6,7 +6,7 @@ import _ from "lodash";
  * Background worker using QueueAdapter.
  */
 export default class WorkerApp {
-  constructor({ queueAdapter, instrumentationAgent, jobs }) {
+  constructor({ Hull, queueAdapter, instrumentationAgent, jobs }) {
     this.queueAdapter = queueAdapter;
     this.jobs = jobs;
     this.instrumentationAgent = instrumentationAgent;
@@ -39,7 +39,7 @@ export default class WorkerApp {
     this.queueAdapter.process("queueApp", (job) => {
       return this.dispatch(job);
     });
-
+    Hull.logger.info("workerApp.process");
     return this;
   }
 
