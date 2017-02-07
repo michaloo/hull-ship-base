@@ -10,6 +10,6 @@ export default function requireConfigurationFactory(check) {
       return res.status(403).send("Ship is not configured");
     }
     return next();
-  }
+  };
 }
 

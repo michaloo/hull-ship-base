@@ -8,7 +8,7 @@
 export default function updateSettings(req, newSettings) {
   const hullClient = req.hull.client;
   return hullClient.get(this.ship.id)
-    .then(ship => {
+    .then((ship) => {
       const private_settings = { ...ship.private_settings, ...newSettings };
       ship.private_settings = private_settings;
       return hullClient.put(ship.id, { private_settings });

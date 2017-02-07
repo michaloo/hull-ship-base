@@ -8,9 +8,9 @@ export default function segmentsMiddleware(req, res, next) {
     return next();
   }
 
-  req.hull.client.get("/segments")
-    .then(segments => {
+  return req.hull.client.get("/segments")
+    .then((segments) => {
       req.hull.segments = segments;
-      next();
+      return next();
     });
 }

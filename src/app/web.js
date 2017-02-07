@@ -3,13 +3,13 @@ import path from "path";
 import { renderFile } from "ejs";
 import timeout from "connect-timeout";
 
+import StaticRouter from "../helpers/static-router";
+
 
 /**
  * Base Express app for Ships front part
  */
 export default function WebApp({ Hull, instrumentationAgent }) {
-  const { Routes } = Hull;
-  const { Readme, Manifest } = Routes;
   const app = express();
 
   app.use(instrumentationAgent.startMiddleware());
@@ -23,12 +23,7 @@ export default function WebApp({ Hull, instrumentationAgent }) {
   app.set("views", path.resolve(__dirname, "..", "..", "..", "views"));
   app.set("view engine", "ejs");
 
-
-  app.use(express.static(path.resolve(__dirname, "..", "..", "..", "dist")));
-  app.use(express.static(path.resolve(__dirname, "..", "..", "..", "assets")));
-  app.get("/manifest.json", Manifest(`${__dirname}/../..`));
-  app.get("/", Readme);
-  app.get("/readme", Readme);
+  app.use(StaticRouter({ Hull }));
 
   const originalListen = app.listen;
   app.listen = function overriddenListen(port) {

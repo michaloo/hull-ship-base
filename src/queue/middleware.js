@@ -8,6 +8,6 @@ export default function queueMiddlewareFactory(queueAdapter) {
     req.hull = req.hull || {};
     req.hull.queue = req.hull.queue || queueCreate.bind(null, queueAdapter, req);
     return next();
-  }
+  };
 }
 

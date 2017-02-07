@@ -8,7 +8,7 @@ export default class GroupHandler {
   static exit() {
     console.log("groupHandler.exit");
     if (!GroupHandler.exiting) {
-      const exiting = Promise.all(_.map(HANDLERS, (h) => h.flush()));
+      const exiting = Promise.all(_.map(HANDLERS, h => h.flush()));
       GroupHandler.exiting = exiting;
       return exiting;
     }

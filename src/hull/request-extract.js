@@ -1,4 +1,5 @@
 import Promise from "bluebird";
+import URI from "urijs";
 
 /**
  * Start an extract job and be notified with the url when complete.

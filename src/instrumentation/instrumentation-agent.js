@@ -2,7 +2,6 @@ import util from "util";
 import raven from "raven";
 import metrics from "datadog-metrics";
 import dogapi from "dogapi";
-import _ from "lodash";
 
 import MetricAgent from "./metric-agent";
 
@@ -12,7 +11,7 @@ export default class InstrumentationAgent {
     this.nr = null;
     this.raven = null;
     try {
-      this.manifest = require(`${process.cwd()}/manifest.json`); // eslint-disable-line global-require
+      this.manifest = require(`${process.cwd()}/manifest.json`); // eslint-disable-line import/no-dynamic-require,global-require
     } catch (e) {
       this.manifest = {};
     }
