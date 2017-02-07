@@ -1,0 +1,62 @@
+{
+  "name": "hull-ship-base",
+  "description": "A Hull connector/ship foudation",
+  "version": "0.1.0",
+  "homepage": "https://github.com/hull/hull-ship-base",
+  "license": "MIT",
+  "main": "lib",
+  "author": {
+    "name": "Hull",
+    "email": "contact@hull.io",
+    "url": "https://github.com/hull"
+  },
+  "engines": {
+    "node": "6.x",
+    "npm": "3.x"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/hull/hull-ship-base"
+  },
+  "bugs": {
+    "url": "https://github.com/hull/hull-ship-base"
+  },
+  "scripts": {
+    "build": "npm run clean && npm run build:server",
+    "build:server": "babel src -d lib",
+    "start": "node ./lib",
+    "test": "npm run test:lint && npm run test:unit && npm run test:modules",
+    "test:lint": "eslint server",
+    "test:modules": "npm outdated --depth=0",
+    "test:unit": "NODE_ENV=test mocha --require babel-register -R spec ./tests",
+    "clean": "rimraf lib",
+    "update": "updtr",
+    "postinstall": "npm run build"
+  },
+  "keywords": [
+    "hull",
+    "ship",
+    "hull-ship",
+    "base",
+    "foundation"
+  ],
+  "devDependencies": {
+    "babel-eslint": "^7.1.1",
+    "eslint": "^3.14.1",
+    "eslint-config-airbnb-base": "^11.0.1",
+    "eslint-plugin-import": "^2.2.0",
+    "mocha": "^3.2.0",
+    "rimraf": "^2.5.4",
+    "updtr": "^0.2.3"
+  },
+  "dependencies": {
+    "babel-cli": "^6.22.2",
+    "babel-core": "^6.22.1",
+    "babel-preset-es2015": "^6.22.0",
+    "babel-preset-stage-0": "^6.22.0",
+    "babel-register": "^6.22.0",
+    "hull": "^0.10.6",
+    "lodash": "^4.17.4",
+    "minimist": "^1.2.0"
+  }
+}
