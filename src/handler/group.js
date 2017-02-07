@@ -15,15 +15,14 @@ export default class GroupHandler {
     return Promise.resolve([]);
   }
 
-  static getHandler(args) {
-    const name = args.ns + args.ship.id;
-    return HANDLERS[name] = HANDLERS[name] || new GroupHandler(args); // eslint-disable-line no-return-assign
+  static getHandler(ns, args) {
+    const name = ns + args.req.hull.ship.id;
+    return HANDLERS[name] = HANDLERS[name] || new GroupHandler(ns, args); // eslint-disable-line no-return-assign
   }
 
-  constructor({ ns = "", ship, hull, options = {} }) {
+  constructor(ns, { req, options = {} }) {
     this.ns = ns;
-    this.ship = ship;
-    this.hull = hull;
+    this.logger = req.hull.client.logger;
     this.messages = [];
     this.options = options;
 
@@ -36,9 +35,9 @@ export default class GroupHandler {
     return this;
   }
 
-  add(message) {
+  addMessage(message) {
     this.messages.push(message);
-    this.hull.client.logger.info("groupHandler.added", this.messages.length);
+    this.logger.info("groupHandler.added", this.messages.length);
     const { maxSize } = this.options;
     if (this.messages.length >= maxSize) {
       this.flush();
@@ -50,14 +49,14 @@ export default class GroupHandler {
 
   flush() {
     const messages = this.messages;
-    this.hull.client.logger.info("groupHandler.flush", messages.length);
+    this.logger.info("groupHandler.flush", messages.length);
     this.messages = [];
     return this.callback(messages)
       .then(() => {
-        this.hull.client.logger.info("groupHandler.flush.sucess");
+        this.logger.info("groupHandler.flush.sucess");
       }, (err) => {
         console.error(err);
-        this.hull.client.logger.error("groupHandler.flush.error", err);
+        this.logger.error("groupHandler.flush.error", err);
       });
   }
 }

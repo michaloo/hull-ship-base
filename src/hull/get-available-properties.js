@@ -1,6 +1,6 @@
 import _ from "lodash";
 
-export default function getProperties(raw, path, id_path) {
+function getProperties(raw, path, id_path) {
   const properties = {};
   const tree = [];
 
@@ -25,4 +25,15 @@ export default function getProperties(raw, path, id_path) {
   });
 
   return { properties, tree };
+}
+
+
+/**
+ * gets all existing Properties in the organization along with their metadata
+ * @return {Promise}
+ */
+export default function getAvailableProperties(req) {
+  return req.hull.client
+    .get("search/user_reports/bootstrap")
+    .then(({ tree }) => getProperties(tree).properties);
 }

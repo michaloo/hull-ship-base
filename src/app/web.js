@@ -7,7 +7,9 @@ import timeout from "connect-timeout";
 /**
  * Base Express app for Ships front part
  */
-export default function WebApp() {
+export default function WebApp(Hull) {
+  const { Routes } = Hull;
+  const { Readme, Manifest } = Routes;
   const app = express();
 
   // the main responsibility of following timeout middleware
@@ -17,6 +19,13 @@ export default function WebApp() {
 
   app.set("views", path.resolve(__dirname, "..", "..", "..", "views"));
   app.set("view engine", "ejs");
+
+
+  app.use(express.static(path.resolve(__dirname, "..", "..", "..", "dist")));
+  app.use(express.static(path.resolve(__dirname, "..", "..", "..", "assets")));
+  app.get("/manifest.json", Manifest(`${__dirname}/../..`));
+  app.get("/", Readme);
+  app.get("/readme", Readme);
 
   return app;
 }

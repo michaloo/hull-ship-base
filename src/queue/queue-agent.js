@@ -27,4 +27,10 @@ export default class QueueAgent {
       context
     }, options);
   }
+
+  shipAppMiddleware(req, res, next) {
+    req.shipApp = req.shipApp || {};
+    req.shipApp.queueAgent = req.shipApp.queueAgent || this;
+    next();
+  }
 }

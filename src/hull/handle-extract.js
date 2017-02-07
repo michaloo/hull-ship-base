@@ -7,11 +7,16 @@ import BatchStream from "batch-stream";
 
 
 /**
- * @param {Object} options { url, format, chunkSize }
+ * @param {Object} req Request Object
+ * @param {Object} chunkSize
  * @param {Function} callback returning a Promise
- * @return Promise
+ * @return {Promise}
+ *
+ * return handleExtract(req, 100, (users) => Promise.resolve())
  */
-export default function BatchHandler({ url, format, chunkSize }, callback) {
+export default function handleExtract(req, chunkSize, callback) {
+  const { url, format } = req;
+  const { logger } = req.hull.client;
   if (!url) return Promise.reject(new Error("Missing URL"));
   const decoder = format === "csv" ? CSVStream.createStream({ escapeChar: "\"", enclosedChar: "\"" }) : JSONStream.parse();
 
@@ -24,7 +29,7 @@ export default function BatchHandler({ url, format, chunkSize }, callback) {
       try {
         return callback(...args);
       } catch (e) {
-        this.hullClient.logger.error("ExtractAgent.handleExtract.error", e);
+        logger.error("ExtractAgent.handleExtract.error", e);
         // throw e;
         return Promise.reject(e);
       }
