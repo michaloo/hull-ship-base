@@ -4,7 +4,7 @@ export default class MetricAgent {
   constructor(req, instrumentationAgent) {
     this.metrics = instrumentationAgent.metrics;
     this.dogapi = instrumentationAgent.dogapi;
-    this.context = req.hull.client.configuration();
+    this.context = req.hull.client ? req.hull.client.configuration() : {};
   }
 
   val(metric, value = 1) {

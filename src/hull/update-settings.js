@@ -15,10 +15,10 @@ export default function updateSettings(req, newSettings) {
     })
     .then((ship) => {
       req.hull.ship = ship;
-      if (!req.shipApp.shipCache) {
+      if (!req.hull.cache) {
         return ship;
       }
-      return req.shipApp.shipCache.del(ship.id)
+      return req.hull.cache.del(ship.id)
         .then(() => {
           return ship;
         });

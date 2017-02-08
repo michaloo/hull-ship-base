@@ -1,5 +1,4 @@
 import express from "express";
-import path from "path";
 import { renderFile } from "ejs";
 import timeout from "connect-timeout";
 
@@ -20,15 +19,15 @@ export default function WebApp({ Hull, instrumentationAgent }) {
   app.use(timeout("25s"));
   app.engine("html", renderFile);
 
-  app.set("views", path.resolve(__dirname, "..", "..", "..", "views"));
+  app.set("views", `${process.cwd()}/assets`);
   app.set("view engine", "ejs");
 
-  app.use(StaticRouter({ Hull }));
+  app.use("/", StaticRouter({ Hull }));
 
-  const originalListen = app.listen;
-  app.listen = function overriddenListen(port, cb) {
-    app.use(instrumentationAgent.stopMiddleware());
-    return originalListen(port, () => {
+  // const originalListen = app.listen;
+  app.listenHull = function listenHull(port, cb) {
+    // app.use(instrumentationAgent.stopMiddleware());
+    return app.listen(port, () => {
       Hull.logger.info("webApp.listen", port);
       if (cb) {
         cb();

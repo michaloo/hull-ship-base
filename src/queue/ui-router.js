@@ -21,10 +21,10 @@ function auth(pass) {
   };
 }
 
-export default function QueueRouter({ shipConfig, queueAdapter }) {
+export default function QueueUiRouter({ hostSecret, queueAdapter }) {
   const router = Router();
 
-  router.use(auth(shipConfig.hostSecret));
+  router.use(auth(hostSecret));
   router.use("/_api", queueAdapter.app);
   router.use("/", ui.app);
 

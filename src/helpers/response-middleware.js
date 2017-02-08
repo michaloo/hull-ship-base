@@ -16,6 +16,7 @@ export default function responseMiddleware(result, req, res, next) {
   } else {
     res.status(200);
   }
-  res.end("ok");
+  result = (_.isString(result)) ? result : "ok";
+  res.end(result);
   next();
 }

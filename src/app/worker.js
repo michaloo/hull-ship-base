@@ -6,7 +6,7 @@ import _ from "lodash";
  * Background worker using QueueAdapter.
  */
 export default class WorkerApp {
-  constructor({ Hull, queueAdapter, instrumentationAgent, jobs }) {
+  constructor({ Hull, queueAdapter, hullMiddleware, instrumentationAgent, jobs }) {
     this.queueAdapter = queueAdapter;
     this.jobs = jobs;
     this.instrumentationAgent = instrumentationAgent;
@@ -15,6 +15,8 @@ export default class WorkerApp {
     this.supply = new Supply();
 
     this.use(instrumentationAgent.metricMiddleware);
+    this.use(hullMiddleware);
+
     // instrument jobs between 1 and 5 minutes
     setInterval(this.metricJobs.bind(this), _.random(60000, 300000));
   }
@@ -57,17 +59,18 @@ export default class WorkerApp {
           .then(() => {
             if (!this.jobs[jobName]) {
               const err = new Error(`Job not found: ${jobName}`);
+              console.log("HULLCLIENT", req.hull.client);
               req.hull.client.logger.error(err.message);
               return Promise.reject(err);
             }
             req.hull.client.logger.info("dispatch", { id: job.id, name: jobName });
-            req.metric.inc(`ship.job.${jobName}.start`);
+            req.hull.metric.inc(`ship.job.${jobName}.start`);
             return this.jobs[jobName].call(job, req, res);
           })
           .then((jobRes) => {
             callback(null, jobRes);
           }, (err) => {
-            req.metric.Inc(`ship.job.${jobName}.error`);
+            req.hull.metric.inc(`ship.job.${jobName}.error`);
             this.instrumentationAgent.catchError(err, {
               job_id: job.id
             }, {
@@ -81,7 +84,7 @@ export default class WorkerApp {
             this.instrumentationAgent.endTransaction();
             const duration = process.hrtime(startTime);
             const ms = (duration[0] * 1000) + (duration[1] / 1000000);
-            req.metric.val(`ship.job.${jobName}.duration`, ms);
+            req.hull.metric.val(`ship.job.${jobName}.duration`, ms);
           });
       });
     });

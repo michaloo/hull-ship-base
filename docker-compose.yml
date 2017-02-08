@@ -3,10 +3,16 @@ services:
     npm:
         image: node:6
         env_file: .env
-        entrypoint: npm
-        command: run start:dev
+        entrypoint: bash
+        # command: run start:dev
         ports:
             - "$PORT:$PORT"
         working_dir: /app
+        links:
+            - redis
         volumes:
             - .:/app
+    redis:
+        image: redis:3
+        ports:
+          - "6379:6379"

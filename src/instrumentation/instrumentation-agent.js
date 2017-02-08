@@ -37,6 +37,8 @@ export default class InstrumentationAgent {
       });
       this.raven.patchGlobal();
     }
+
+    this.metricMiddleware = this.metricMiddleware.bind(this);
   }
 
   startTransaction(jobName, callback) {

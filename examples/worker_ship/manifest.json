@@ -1,0 +1,6 @@
+{
+  "name" : "example-worker-ship",
+  "version" : "0.1.0",
+  "tags" : ["outgoing", "batch", "oneColumn"],
+  "readme": "readme.md"
+}
