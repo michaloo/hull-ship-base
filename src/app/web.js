@@ -26,10 +26,14 @@ export default function WebApp({ Hull, instrumentationAgent }) {
   app.use(StaticRouter({ Hull }));
 
   const originalListen = app.listen;
-  app.listen = function overriddenListen(port) {
+  app.listen = function overriddenListen(port, cb) {
     app.use(instrumentationAgent.stopMiddleware());
-    Hull.logger.info("webApp.listen", port);
-    return originalListen(port);
+    return originalListen(port, () => {
+      Hull.logger.info("webApp.listen", port);
+      if (cb) {
+        cb();
+      }
+    });
   };
 
   return app;
