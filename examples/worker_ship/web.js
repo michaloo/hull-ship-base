@@ -2,7 +2,7 @@
 import WebApp from "../../src/app/web";
 
 /* utilities */
-import { QueueRouter, BatchRouter } from "../../src/util";
+import { QueueRouter, BatchRouter } from "../../src/ship";
 import QueueUiRouter from "../../src/queue/ui-router";
 
 /* common setup */
@@ -11,7 +11,7 @@ import * as common from "./common";
 const app = new WebApp(common);
 
 app.use("/batch", BatchRouter({ ...common, chunkSize: 1 })
-  .use(common.queueAdapter.middleware)
+  .use(common.queueAgent.middleware)
   .callback((req, users) => req.hull.queue("sendUsers", { users }))
 );
 

@@ -2,8 +2,8 @@ import { Router } from "express";
 import bodyParser from "body-parser";
 
 import { handleExtract, setUserSegments, filterUserSegments } from "../hull";
-import responseMiddleware from "../helpers/response-middleware";
-import tokenMiddleware from "../../src/helpers/token-middleware";
+import responseMiddleware from "./response-middleware";
+import tokenMiddleware from "./token-middleware";
 
 export default function BatchRouter({ hullMiddleware, chunkSize = 100 }) {
   const router = Router();

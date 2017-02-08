@@ -1,12 +1,12 @@
 import { Router } from "express";
 import bodyParser from "body-parser";
 
-import responseMiddleware from "../helpers/response-middleware";
+import responseMiddleware from "./response-middleware";
 
-export default function QueueRouter({ queueAdapter }) {
+export default function QueueRouter({ queueAgent }) {
   const router = Router();
   router.use(bodyParser.json());
-  router.use(queueAdapter.middleware);
+  router.use(queueAgent.middleware);
 
   router.job = function setJob(jobName) {
     router.all("/", (req, res, next) => {

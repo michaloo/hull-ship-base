@@ -5,7 +5,7 @@ import WebApp from "../../src/app/web";
 import InstrumentationAgent from "../../src/instrumentation";
 
 /* utilities */
-import { BatchRouter } from "../../src/util";
+import { BatchRouter } from "../../src/ship";
 
 /* setup */
 const hostSecret = process.env.SECRET || "1234";

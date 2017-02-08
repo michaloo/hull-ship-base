@@ -2,7 +2,7 @@ import express from "express";
 import { renderFile } from "ejs";
 import timeout from "connect-timeout";
 
-import StaticRouter from "../helpers/static-router";
+import StaticRouter from "../ship/static-router";
 
 
 /**

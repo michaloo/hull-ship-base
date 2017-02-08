@@ -21,11 +21,11 @@ function auth(pass) {
   };
 }
 
-export default function QueueUiRouter({ hostSecret, queueAdapter }) {
+export default function QueueUiRouter({ hostSecret, queueAgent }) {
   const router = Router();
 
   router.use(auth(hostSecret));
-  router.use("/_api", queueAdapter.app);
+  router.use("/_api", queueAgent.adapter.app);
   router.use("/", ui.app);
 
   return router;

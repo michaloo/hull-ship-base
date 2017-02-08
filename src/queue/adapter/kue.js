@@ -1,18 +1,14 @@
 import Promise from "bluebird";
 import kue from "kue";
-
-import BaseAdapter from "./base";
-
 /**
  * Kue Adapter for queue
  */
-export default class KueAdapter extends BaseAdapter {
+export default class KueAdapter {
 
   /**
    * @param {Object} queue Kue instance
    */
   constructor(options) {
-    super(options);
     this.options = options;
     this.queue = kue.createQueue(options);
     this.queue.watchStuckJobs();

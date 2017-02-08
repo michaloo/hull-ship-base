@@ -1,7 +1,7 @@
 /**
  * @param {Promise} promise
  */
-export default function ExitHandler(promise) {
+export default function exitHandler(promise) {
   function exitNow() {
     console.warn("exitHandler.exitNow");
     process.exit(0);

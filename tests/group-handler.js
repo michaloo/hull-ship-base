@@ -2,7 +2,7 @@
 import Promise from "bluebird";
 import { expect } from "chai";
 
-import GroupHandler from "../src/helpers/group-handler";
+import GroupHandler from "../src/ship/group-handler";
 
 const reqStub = {
   hull: {
