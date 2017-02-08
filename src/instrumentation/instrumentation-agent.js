@@ -91,4 +91,8 @@ export default class InstrumentationAgent {
     req.hull.metric = req.hull.metric || new MetricAgent(req, this);
     next();
   }
+
+  metricVal(metric, value = 1) {
+    return (new MetricAgent({}, this)).val(metric, value);
+  }
 }
