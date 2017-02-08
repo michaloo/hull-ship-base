@@ -19,7 +19,7 @@ export default function WebApp({ Hull, instrumentationAgent }) {
   app.use(timeout("25s"));
   app.engine("html", renderFile);
 
-  app.set("views", `${process.cwd()}/assets`);
+  app.set("views", `${process.cwd()}/views`);
   app.set("view engine", "ejs");
 
   app.use("/", StaticRouter({ Hull }));
