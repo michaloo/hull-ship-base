@@ -1,6 +1,6 @@
 import express from "express";
 
-export default function StaticRouter({ Hull }) {
+export default function staticRouter({ Hull }) {
   const router = express.Router();
   const { Routes } = Hull;
   const { Readme, Manifest } = Routes;

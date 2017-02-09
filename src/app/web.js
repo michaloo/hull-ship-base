@@ -2,7 +2,7 @@ import express from "express";
 import { renderFile } from "ejs";
 import timeout from "connect-timeout";
 
-import StaticRouter from "../ship/static-router";
+import staticRouter from "../ship/static-router";
 
 
 /**
@@ -22,7 +22,7 @@ export default function WebApp({ Hull, instrumentationAgent }) {
   app.set("views", `${process.cwd()}/views`);
   app.set("view engine", "ejs");
 
-  app.use("/", StaticRouter({ Hull }));
+  app.use("/", staticRouter({ Hull }));
 
   // const originalListen = app.listen;
   app.listenHull = function listenHull(port, cb) {

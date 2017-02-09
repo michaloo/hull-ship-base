@@ -3,7 +3,7 @@ import bodyParser from "body-parser";
 
 import responseMiddleware from "./response-middleware";
 
-export default function QueueRouter({ queueAgent }) {
+export default function queueRouter({ queueAgent }) {
   const router = Router();
   router.use(bodyParser.json());
   router.use(queueAgent.middleware);

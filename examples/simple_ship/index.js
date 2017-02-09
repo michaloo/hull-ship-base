@@ -5,7 +5,7 @@ import WebApp from "../../src/app/web";
 import InstrumentationAgent from "../../src/instrumentation";
 
 /* utilities */
-import { BatchRouter } from "../../src/ship";
+import { batchRouter } from "../../src/ship";
 
 /* setup */
 const hostSecret = process.env.SECRET || "1234";
@@ -16,6 +16,6 @@ const app = new WebApp({
 });
 const hullMiddleware = Hull.Middleware({ hostSecret });
 
-app.use("/batch", BatchRouter({ hullMiddleware }).callback(users => console.log(users)));
+app.use("/batch", batchRouter({ hullMiddleware }).callback(users => console.log(users)));
 
 app.listenHull(8070);

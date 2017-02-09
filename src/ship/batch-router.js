@@ -5,7 +5,7 @@ import { handleExtract, setUserSegments, filterUserSegments } from "../hull";
 import responseMiddleware from "./response-middleware";
 import tokenMiddleware from "./token-middleware";
 
-export default function BatchRouter({ hullMiddleware, chunkSize = 100 }) {
+export default function batchRouter({ hullMiddleware, chunkSize = 100 }) {
   const router = Router();
   router.use(bodyParser.json());
   router.use(tokenMiddleware);
