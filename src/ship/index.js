@@ -1,6 +1,7 @@
 export QueueRouter from "./queue-router";
 export BatchRouter from "./batch-router";
 export StaticRouter from "./static-router";
+export ActionRouter from "./action-router";
 
 export configuredMiddleware from "./configured-middleware";
 export responseMiddleware from "./response-middleware";
