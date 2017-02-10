@@ -5,7 +5,7 @@ export default class MetricAgent {
     this.metrics = instrumentationAgent.metrics;
     this.dogapi = instrumentationAgent.dogapi;
     this.manifest = instrumentationAgent.manifest;
-    this.context = _.get(req, "hull.client") ? req.hull.client.configuration() : {};
+    this.req = req;
   }
 
   val(metric, value = 1) {
@@ -42,7 +42,7 @@ export default class MetricAgent {
   }
 
   getMetricTags() {
-    const { organization = "none", id = "none" } = this.context;
+    const { organization = "none", id = "none" } = _.get(this.req, "hull.client") ? this.req.hull.client.configuration() : {};
     const hullHost = organization.split(".").slice(1).join(".");
     const tags = [
       "source:ship", `ship_version:${this.manifest.version}`, `ship_name:${this.manifest.name}`,
