@@ -23,7 +23,7 @@
   },
   "scripts": {
     "build": "npm run clean && npm run build:server",
-    "build:server": "babel src -d lib",
+    "build:server": "./node_modules/.bin/babel src -d lib",
     "start": "node ./lib",
     "test": "npm run test:lint && npm run test:unit",
     "test:lint": "eslint src tests examples",
